@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 8272845121880395339}
   m_Layer: 0
   m_Name: EvilDog
-  m_TagString: Untagged
+  m_TagString: Dog
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -238,4 +238,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mSpeed: 8
-  mAttackRange: 5
+  mAttackRange: 2

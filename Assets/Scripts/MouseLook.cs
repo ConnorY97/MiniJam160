@@ -1,3 +1,4 @@
+using TreeEditor;
 using UnityEngine;
 
 public class MouseLook : MonoBehaviour
@@ -5,7 +6,10 @@ public class MouseLook : MonoBehaviour
     // Member variables
     [SerializeField]
     private float mMouseSensitivity = 100f;
-    //[SerializeField] private Transform mPlayerBody;
+    [SerializeField] private Transform mPlayerBody;
+
+    [SerializeField]
+    private Transform mCamPos = null;
 
     private float mXRot = 0f;
     private float mYRot = 0f;
@@ -30,11 +34,11 @@ public class MouseLook : MonoBehaviour
 
         mYRot += mouseX;
 
-
-
         // Apply rotation to the camera and the player body
         transform.localRotation = Quaternion.Euler(mXRot, mYRot, 0f);
-        //transform.Rotate(Vector3.up * mouseX);
-        //mPlayerBody.Rotate(Vector3.up * mouseX);
+
+        mPlayerBody.rotation = Quaternion.Euler(0, mYRot, 0);
+
+        transform.position = mCamPos.position;
     }
 }

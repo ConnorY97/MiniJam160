@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,10 +6,6 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private float mMoveSpeed = 5f;        // Speed of the player movement
-    [SerializeField]
-    private float mJumpForce = 5f;        // Force applied when the player jumps
-    [SerializeField]
-    private bool mIsGrounded = false;             // Flag to check if the player is on the ground
     [SerializeField]
     private Slider mHealthBar = null;
     [SerializeField]
@@ -33,6 +30,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private Image mBottom = null;
 
+    [SerializeField]
+    private Animator mAnimator = null;
+
+    private float mHorizontalInput = 0;
+    private float mVerticalInput = 0;
+
     private float mDamageTime = 0.0f;
 
     private Rigidbody mRigidBody;               // Reference to the Rigidbody component
@@ -47,21 +50,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Get input from the horizontal and vertical axes (WASD or arrow keys)
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
-
-        // Create a new Vector3 for the player's movement
-        Vector3 movement = new Vector3(moveX * mMoveSpeed, mRigidBody.velocity.y, moveZ * mMoveSpeed);
-
-        // Apply the movement to the Rigidbody's velocity
-        mRigidBody.velocity = movement;
-
-        // Check for jump input (space bar) and if the player is grounded
-        if (Input.GetButtonDown("Jump") && mIsGrounded)
-        {
-            mRigidBody.AddForce(new Vector3(0f, mJumpForce, 0f), ForceMode.Impulse);
-        }
+        GetInput();
 
         // Outside of the light take damage
         if (mInLight == false && mDamageTime < Time.time)
@@ -79,8 +68,6 @@ public class PlayerMovement : MonoBehaviour
             mDamageTime = Time.time + mDamageDelay;
         }
 
-
-
         mHealthBar.value = mHealth;
 
         // UI
@@ -90,23 +77,33 @@ public class PlayerMovement : MonoBehaviour
             mBottom.gameObject.SetActive(!mInLight);
             mLeft.gameObject.SetActive(!mInLight);
         }
-    }
 
-    // Check if the player is colliding with the ground
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
+        // Animations
         {
-            mIsGrounded = true;
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                mAnimator.SetTrigger("Attack");
+            }
         }
     }
 
-    // Check if the player has left the ground
-    void OnCollisionExit(Collision collision)
+    private void FixedUpdate()
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            mIsGrounded = false;
-        }
+        Move();
+    }
+    private void GetInput()
+    {
+        // Get input from the horizontal and vertical axes (WASD or arrow keys)
+        mHorizontalInput = Input.GetAxis("Horizontal");
+        mVerticalInput = Input.GetAxis("Vertical");
+    }
+
+    private void Move()
+    {
+        // Create a new Vector3 for the player's movement
+        var movement = transform.forward * mVerticalInput + transform.right * mHorizontalInput;
+
+        // Apply the movement to the Rigidbody's velocity
+        mRigidBody.AddForce(movement.normalized * mMoveSpeed * Time.deltaTime);
     }
 }
