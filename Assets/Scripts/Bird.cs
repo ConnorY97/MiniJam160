@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bird : MonoBehaviour
@@ -17,8 +15,8 @@ public class Bird : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.fixedDeltaTime);
     }
 }
