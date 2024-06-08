@@ -8,6 +8,13 @@ public class Bird : MonoBehaviour
     private GameObject mTarget = null;
     [SerializeField]
     private float mSpeed = 10.0f;
+    [SerializeField]
+    private Animator mAnimator = null;
+
+    private void Start()
+    {
+        mAnimator.SetFloat("Speed", mSpeed);
+    }
 
     // Update is called once per frame
     void Update()
