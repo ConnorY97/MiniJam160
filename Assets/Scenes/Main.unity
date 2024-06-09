@@ -277,6 +277,8 @@ MonoBehaviour:
   mEvilDog: {fileID: 1493130931}
   mStartingDogNumber: 5
   mSpawnRadius: 100
+  mScaryFaceSpeed: 100
+  mScaryFace: {fileID: 652787101}
 --- !u!4 &205701840
 Transform:
   m_ObjectHideFlags: 0
