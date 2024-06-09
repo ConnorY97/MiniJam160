@@ -13,12 +13,21 @@ public class GameManager : MonoBehaviour
     private int mStartingDogNumber = 5;
     [SerializeField]
     private float mSpawnRadius = 10.0f;
+    [SerializeField]
+    private float mScaryFaceSpeed = 50.0f;
+
+    [SerializeField]
+    private GameObject mScaryFace = null;
 
     private List<GameObject> mEvilDogList = new List<GameObject>();
 
     private List<GameObject> mBirds = new List<GameObject>();
 
     private GameObject mPlayer = null;
+
+    private bool mGameOver = false;
+
+
 
     // Instance Stuff
     public static GameManager Instance { get; private set; }
@@ -60,7 +69,23 @@ public class GameManager : MonoBehaviour
     {
         if (mEvilDogList.Count == 0 || mBirds.Count == 0)
         {
-            SceneManager.LoadScene("MainMenu");
+            EndSequence();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        // Make the player look at the scary face as it rushes towards them
+        if (mGameOver)
+        {
+            mScaryFace.transform.position = Vector3.MoveTowards(mScaryFace.transform.position, mPlayer.transform.position, mScaryFaceSpeed * Time.fixedDeltaTime);
+
+            mPlayer.transform.LookAt(mScaryFace.transform.transform);
+
+            if (Vector3.Distance(mScaryFace.transform.position, mPlayer.transform.position) < 5.0f)
+            {
+                SceneManager.LoadScene("MainMenu");
+            }
         }
     }
 
@@ -103,5 +128,17 @@ public class GameManager : MonoBehaviour
     public void RemoveBird(GameObject birdToRemove)
     {
         mBirds.Remove(birdToRemove);
+    }
+
+    /// <summary>
+    /// Lock player movement and return them to the begining of the level
+    /// </summary>
+    private void EndSequence()
+    {
+        mGameOver = true;
+
+        mPlayer.GetComponent<PlayerMovement>().InputEnabled = false;
+
+        mPlayer.transform.position = Vector3.zero;
     }
 }

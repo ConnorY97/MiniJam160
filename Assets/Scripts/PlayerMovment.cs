@@ -43,6 +43,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody mRigidBody;               // Reference to the Rigidbody component
 
+    private bool mInputEnabled = true;
+    public bool InputEnabled
+    {
+        get { return mInputEnabled; }
+        set { mInputEnabled = value; }
+    }
+
     void Start()
     {
         // Get the Rigidbody component attached to this game object
@@ -96,9 +103,12 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GetInput()
     {
-        // Get input from the horizontal and vertical axes (WASD or arrow keys)
-        mHorizontalInput = Input.GetAxisRaw("Horizontal");
-        mVerticalInput = Input.GetAxisRaw("Vertical");
+        if (mInputEnabled)
+        {
+            // Get input from the horizontal and vertical axes (WASD or arrow keys)
+            mHorizontalInput = Input.GetAxisRaw("Horizontal");
+            mVerticalInput = Input.GetAxisRaw("Vertical");
+        }
     }
 
     private void Move()
