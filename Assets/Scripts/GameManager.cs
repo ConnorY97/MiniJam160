@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,7 +19,8 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> mEvilDogList = new List<GameObject>();
 
-    private List<GameObject> mBirds = new List<GameObject>();
+    public List<Bird> birds => mBirds;
+    private List<Bird> mBirds;
 
     private GameObject mPlayer = null;
     private PlayerMovement mPlayerReference = null;
@@ -38,12 +40,6 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        //DontDestroyOnLoad(gameObject);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         mPlayer = GameObject.FindGameObjectWithTag("Player");
         // Make sure we find the player
         Debug.Assert(mPlayer != null, "Failed to find the player");
@@ -55,18 +51,17 @@ public class GameManager : MonoBehaviour
         SpawnDogs(mStartingDogNumber);
 
         // Find all the birds
-        var currentBirds = GameObject.FindGameObjectsWithTag("Bird");
-        foreach (GameObject bird in currentBirds)
-        {
-            mBirds.Add(bird);
-        }
+        mBirds = FindObjectsOfType<Bird>().ToList();
 
         Debug.Assert(mBirds.Count != 0, "Failed to find the birds");
+
+        //DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Note (Rey): Why do we lose if all dogs are defeated?
         // Current lose conditions
         if (mEvilDogList.Count == 0 || mBirds.Count == 0 || mPlayerReference.Health <= 0)
         {
@@ -126,7 +121,7 @@ public class GameManager : MonoBehaviour
         mEvilDogList.Remove(dogToRemove);
     }
 
-    public void RemoveBird(GameObject birdToRemove)
+    public void RemoveBird(Bird birdToRemove)
     {
         mBirds.Remove(birdToRemove);
     }
