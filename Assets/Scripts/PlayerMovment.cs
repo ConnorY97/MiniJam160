@@ -41,8 +41,6 @@ public class PlayerMovement : MonoBehaviour
 
     private float mDamageTime = 0.0f;
 
-    private float currentSpeed = 0.0f;
-
     private Rigidbody mRigidBody;               // Reference to the Rigidbody component
 
     void Start()

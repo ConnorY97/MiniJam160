@@ -19,4 +19,11 @@ public class Bird : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.fixedDeltaTime);
     }
+
+    public void Dead()
+    {
+        GameManager.Instance.RemoveBird(gameObject);
+
+        Destroy(gameObject);
+    }
 }

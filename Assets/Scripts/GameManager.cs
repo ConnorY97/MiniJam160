@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,21 +16,52 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> mEvilDogList = new List<GameObject>();
 
+    private List<GameObject> mBirds = new List<GameObject>();
+
     private GameObject mPlayer = null;
+
+    // Instance Stuff
+    public static GameManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        //DontDestroyOnLoad(gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         mPlayer = GameObject.FindGameObjectWithTag("Player");
         // Make sure we find the player
-        Debug.Assert(mPlayer != null);
+        Debug.Assert(mPlayer != null, "Failed to find the player");
 
         SpawnDogs(mStartingDogNumber);
+
+        // Find all the birds
+        var currentBirds = GameObject.FindGameObjectsWithTag("Bird");
+        foreach (GameObject bird in currentBirds)
+        {
+            mBirds.Add(bird);
+        }
+
+        Debug.Assert(mBirds.Count != 0, "Failed to find the birds");
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (mEvilDogList.Count == 0 || mBirds.Count == 0)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     // Function to find a random position around the object
@@ -60,5 +93,15 @@ public class GameManager : MonoBehaviour
 
             mEvilDogList.Add(tmp);
         }
+    }
+
+    public void RemoveDog(GameObject dogToRemove)
+    {
+        mEvilDogList.Remove(dogToRemove);
+    }
+
+    public void RemoveBird(GameObject birdToRemove)
+    {
+        mBirds.Remove(birdToRemove);
     }
 }
