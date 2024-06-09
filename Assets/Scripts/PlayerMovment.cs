@@ -1,11 +1,14 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float mMoveSpeed = 5f;        // Speed of the player movement
+    private float mMaxSpeed = 10f;        // Speed of the player movement
+    [SerializeField]
+    private float mAcceleration = 5f;        // Speed of the player movement
+    [SerializeField]
+    private float mFriction = 10f;
     [SerializeField]
     private Slider mHealthBar = null;
     [SerializeField]
@@ -94,16 +97,29 @@ public class PlayerMovement : MonoBehaviour
     private void GetInput()
     {
         // Get input from the horizontal and vertical axes (WASD or arrow keys)
-        mHorizontalInput = Input.GetAxis("Horizontal");
-        mVerticalInput = Input.GetAxis("Vertical");
+        mHorizontalInput = Input.GetAxisRaw("Horizontal");
+        mVerticalInput = Input.GetAxisRaw("Vertical");
     }
 
     private void Move()
     {
+        Vector3 velocity = mRigidBody.velocity;
         // Create a new Vector3 for the player's movement
         var movement = transform.forward * mVerticalInput + transform.right * mHorizontalInput;
 
-        // Apply the movement to the Rigidbody's velocity
-        mRigidBody.AddForce(movement.normalized * mMoveSpeed * Time.deltaTime);
+        Vector3 movementForce = movement.normalized * (mAcceleration + mFriction);
+        Vector3 frictionForce = -velocity.normalized * mFriction;
+
+        Vector3 force = Vector3.zero;
+        force += movementForce;
+        force += frictionForce;
+
+        velocity += force * Time.fixedDeltaTime;
+
+        if (Vector3.Dot(velocity, force) < 0f && velocity.magnitude <= 1f)
+            velocity = Vector3.zero;
+
+        velocity = Vector3.ClampMagnitude(velocity, mMaxSpeed);
+        mRigidBody.velocity = velocity;
     }
 }

@@ -9,7 +9,7 @@ public class Sword : MonoBehaviour
         // If the sword hits the dog, kill it
         if (other.gameObject.tag == "Dog")
         {
-            Destroy(other.gameObject);
+            other.GetComponent<EvilDog>().Dead();
         }
     }
 }

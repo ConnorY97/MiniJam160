@@ -17,7 +17,7 @@ public class EvilDog : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // Make sure we do this first
         // If another dog gets our target, find antother
@@ -34,15 +34,17 @@ public class EvilDog : MonoBehaviour
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
-
+            // Once we are in range we can start moving up towards the bird
             if (Vector3.Distance(transform.position, mTarget.transform.position) < mAttackRange)
             {
-                // Kill the bird
-                Destroy(mTarget);
+                transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.fixedDeltaTime);
+            }
+            // Move along the ground till we get close
+            else
+            {
+                Vector3 targetHeight = new Vector3(mTarget.transform.position.x, transform.position.y, mTarget.transform.position.z);
 
-                // Then kill itself
-                Destroy(gameObject);
+                transform.position = Vector3.MoveTowards(transform.position, targetHeight, mSpeed * Time.fixedDeltaTime);
             }
         }
     }
@@ -60,6 +62,27 @@ public class EvilDog : MonoBehaviour
                 nearest = dist;
                 mTarget = target;
             }
+        }
+    }
+
+    public void Dead()
+    {
+        GameManager.Instance.RemoveDog(gameObject);
+
+        Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Die on collision with the bird
+        if (collision.gameObject.tag == "Bird" && mTarget != null)
+        {
+            // Kill the bird
+            mTarget.GetComponent<Bird>().Dead();
+
+            mTarget = null;
+
+            Dead();
         }
     }
 }
