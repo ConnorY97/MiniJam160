@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,10 +21,9 @@ public class GameManager : MonoBehaviour
     private List<GameObject> mBirds = new List<GameObject>();
 
     private GameObject mPlayer = null;
+    private PlayerMovement mPlayerReference = null;
 
     private bool mGameOver = false;
-
-
 
     // Instance Stuff
     public static GameManager Instance { get; private set; }
@@ -52,6 +48,10 @@ public class GameManager : MonoBehaviour
         // Make sure we find the player
         Debug.Assert(mPlayer != null, "Failed to find the player");
 
+        mPlayerReference = mPlayer.GetComponent<PlayerMovement>();
+
+        Debug.Assert(mPlayerReference != null, "Failed to assign player reference from the mPlayer");
+
         SpawnDogs(mStartingDogNumber);
 
         // Find all the birds
@@ -67,7 +67,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mEvilDogList.Count == 0 || mBirds.Count == 0)
+        // Current lose conditions
+        if (mEvilDogList.Count == 0 || mBirds.Count == 0 || mPlayerReference.Health <= 0)
         {
             EndSequence();
         }
@@ -137,7 +138,7 @@ public class GameManager : MonoBehaviour
     {
         mGameOver = true;
 
-        mPlayer.GetComponent<PlayerMovement>().InputEnabled = false;
+        mPlayerReference.InputEnabled = false;
 
         mPlayer.transform.position = Vector3.zero;
     }

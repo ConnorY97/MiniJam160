@@ -13,6 +13,10 @@ public class PlayerMovement : MonoBehaviour
     private Slider mHealthBar = null;
     [SerializeField]
     private float mHealth = 100.0f;
+    public float Health
+    {
+        get { return mHealth; }
+    }
     [SerializeField]
     private float mDamage = 5.0f;
     [SerializeField]
