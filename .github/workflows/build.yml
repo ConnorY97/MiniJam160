@@ -5,94 +5,34 @@ on:
       - 'build'
 
 jobs:
-  build-webgl-project:
-    name: Build WebGL
+  buildForAllSupportedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        unityVersion:
-          - 2022.3.6f1
         targetPlatform:
-          - WebGL
-        projectName:
-          - MiniJam160
-        projectPath:
-          - ./
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - WebGL # WebGL.
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          lfs: false
-
-      - name: Caching
-        uses: actions/cache@v4
+          fetch-depth: 0
+          lfs: true
+      - uses: actions/cache@v4
         with:
-          path: ./Library
-          key: Library-${{matrix.projectName}}-${{matrix.targetPlatform}}
-          restore-keys: |
-            Library-
-            Library-${{matrix.projectName}}-
-            Library-${{matrix.projectName}}-${{matrix.targetPlatform}}
-
-      - name: Unity Builder
-        uses: game-ci/unity-builder@v4
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+      - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-
-      - name: Uploading the build
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: WebGLBuild
-          path: build
-
-  build-windows-project:
-    name: Build Windows
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        unityVersion:
-          - 2022.3.6f1
-        targetPlatform:
-          - StandaloneWindows64
-        projectName:
-          - MiniJam160
-        projectPath:
-          - ./
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          lfs: false
-
-      - name: Caching
-        uses: actions/cache@v4
-        with:
-          path: ./Library
-          key: Library-${{matrix.projectName}}-${{matrix.targetPlatform}}
-          restore-keys: |
-            Library-
-            Library-${{matrix.projectName}}-
-            Library-${{matrix.projectName}}-${{matrix.targetPlatform}}
-
-      - name: Unity Builder
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: ${{ matrix.targetPlatform }}
-
-      - name: Uploading the build
-        uses: actions/upload-artifact@v4
-        with:
-          name: Windows64Build
-          path: build
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
