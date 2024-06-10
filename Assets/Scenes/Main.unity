@@ -26002,6 +26002,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 801447432064225304, guid: 11aaea5348574644a9eb4f4504fcce3f,
         type: 3}
+      propertyPath: mHealth
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 801447432064225304, guid: 11aaea5348574644a9eb4f4504fcce3f,
+        type: 3}
       propertyPath: mVolume
       value: 
       objectReference: {fileID: 1672507163}
