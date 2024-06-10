@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 public class EvilDog : MonoBehaviour
@@ -47,7 +48,7 @@ public class EvilDog : MonoBehaviour
 
                 // Stop running and jump
                 mAnimator.SetBool("Run Forward", false);
-                mAnimator.SetTrigger("Attack1");
+                mAnimator.SetTrigger("Attack3");
             }
             // Move along the ground till we get close
             else

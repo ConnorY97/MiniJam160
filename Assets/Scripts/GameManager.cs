@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     private float mSpawnRadius = 10.0f;
     [SerializeField]
     private float mScaryFaceSpeed = 50.0f;
-
+    [SerializeField]
+    private bool mDebugging = false;
     [SerializeField]
     private GameObject mScaryFace = null;
 
@@ -22,10 +23,15 @@ public class GameManager : MonoBehaviour
     public List<Bird> birds => mBirds;
     private List<Bird> mBirds;
 
+    [SerializeField]
     private GameObject mPlayer = null;
-    private PlayerMovement mPlayerReference = null;
+    private PlayerController mPlayerReference = null;
 
     private bool mGameOver = false;
+    public bool GameOver
+    {
+        get { return mGameOver; }
+    }
 
     // Instance Stuff
     public static GameManager Instance { get; private set; }
@@ -40,11 +46,10 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        mPlayer = GameObject.FindGameObjectWithTag("Player");
         // Make sure we find the player
         Debug.Assert(mPlayer != null, "Failed to find the player");
 
-        mPlayerReference = mPlayer.GetComponent<PlayerMovement>();
+        mPlayerReference = mPlayer.GetComponent<PlayerController>();
 
         Debug.Assert(mPlayerReference != null, "Failed to assign player reference from the mPlayer");
 
@@ -75,6 +80,26 @@ public class GameManager : MonoBehaviour
             if (mEvilDogs.Count == 0 && mBirds.Count != 0)
             {
                 SpawnDogs(mStartingDogNumber);
+            }
+        }
+
+        if (mDebugging)
+        {
+            if (mDebugging)
+            {
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+                    EndSequence();
+                }
+
+                if (Input.GetKeyDown(KeyCode.P))
+                {
+                    SpawnDogs(mStartingDogNumber);
+                }
+                if (Input.GetKeyDown(KeyCode.O))
+                {
+                    KillAllDogs();
+                }
             }
         }
     }
@@ -147,17 +172,28 @@ public class GameManager : MonoBehaviour
 
         mPlayer.transform.position = Vector3.zero;
 
-        // Remove reaming birds and dogs 
-        foreach (var bird in mBirds)
-        {
-            mBirds.Remove(bird);
-            Destroy(bird);
-        }
+        // Remove reaming birds and dogs
+        KillAllBirds();
+        KillAllDogs();
+    }
 
+    private void KillAllDogs()
+    {
         foreach (var dog in mEvilDogs)
         {
-            mEvilDogs.Remove(dog);
+            dog.gameObject.SetActive(false);
             Destroy(dog);
         }
+        mEvilDogs.Clear();
+    }
+
+    private void KillAllBirds()
+    {
+        foreach (var bird in mBirds)
+        {
+            bird.gameObject.SetActive(false);
+            Destroy(bird);
+        }
+        mBirds.Clear();
     }
 }

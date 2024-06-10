@@ -1,12 +1,23 @@
+using FMOD;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EmitterManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static EmitterManager instance = null;
+
+    private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
