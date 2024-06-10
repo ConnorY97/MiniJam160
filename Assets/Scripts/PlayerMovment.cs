@@ -36,6 +36,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private Volume mVolume = null;
 
+    [SerializeField]
+    private float mLungeStrength = 1000.0f;
+
     private float mHorizontalInput = 0;
     private float mVerticalInput = 0;
 
@@ -99,6 +102,9 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 mAnimator.SetTrigger("Attack");
+
+                // Lunge forward
+                mRigidBody.AddForce(transform.forward * mLungeStrength);
             }
         }
     }
