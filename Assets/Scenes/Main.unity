@@ -415,7 +415,7 @@ MonoBehaviour:
   mEvilDog: {fileID: 1493130931}
   mStartingDogNumber: 5
   mSpawnRadius: 100
-  mScaryFaceSpeed: 100
+  mScaryFaceSpeed: 200
   mScaryFace: {fileID: 652787101}
 --- !u!4 &205701840
 Transform:
@@ -471,10 +471,6 @@ MonoBehaviour:
   mDamage: 1
   mDamageDelay: 0.25
   mInLight: 0
-  mLeft: {fileID: 1282944786}
-  mRight: {fileID: 2097734658}
-  mTop: {fileID: 541751995}
-  mBottom: {fileID: 720927621}
   mAnimator: {fileID: 2070038337}
   mVolume: {fileID: 1672507163}
 --- !u!4 &289250529
