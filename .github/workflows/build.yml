@@ -5,7 +5,7 @@ on:
       - 'build'
 
 jobs:
-  build-project:
+  build-webgl-project:
     name: Build WebGL
     runs-on: ubuntu-latest
     strategy:
@@ -51,8 +51,7 @@ jobs:
           name: Build
           path: build
 
-  jobs:
-    build-project:
+    build-windows-project:
       name: Build Windows
       runs-on: ubuntu-latest
       strategy:
