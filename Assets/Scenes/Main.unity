@@ -476,6 +476,7 @@ MonoBehaviour:
   mTop: {fileID: 541751995}
   mBottom: {fileID: 720927621}
   mAnimator: {fileID: 2070038337}
+  mVolume: {fileID: 1672507163}
 --- !u!4 &289250529
 Transform:
   m_ObjectHideFlags: 0
