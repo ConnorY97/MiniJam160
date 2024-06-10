@@ -149,6 +149,9 @@ public class GameManager : MonoBehaviour
 
             mEvilDogs.Add(tmp);
         }
+
+        // Increment the amount of dogs to spawn each time
+        mStartingDogNumber += 3;
     }
 
     public void RemoveDog(GameObject dogToRemove)
