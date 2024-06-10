@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject mScaryFace = null;
 
-    private List<GameObject> mEvilDogList = new List<GameObject>();
+    private List<GameObject> mEvilDogs = new List<GameObject>();
 
     public List<Bird> birds => mBirds;
     private List<Bird> mBirds;
@@ -61,17 +61,21 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Note (Rey): Why do we lose if all dogs are defeated?
-        // Fixing that now
-        // Lose if you run out of health or you run out of birds
-        if (mPlayerReference.Health <= 0 || mBirds.Count <= 0)
+        // Make sure the game isn't over
+        if (!mGameOver)
         {
-            EndSequence();
-        }
-        // Spawn more dogs if you still have birds but no more dogs
-        if (mEvilDogList.Count == 0 && mBirds.Count != 0)
-        {
-            SpawnDogs(mStartingDogNumber);
+            // Note (Rey): Why do we lose if all dogs are defeated?
+            // Fixing that now
+            // Lose if you run out of health or you run out of birds
+            if (mPlayerReference.Health <= 0 || mBirds.Count <= 0)
+            {
+                EndSequence();
+            }
+            // Spawn more dogs if you still have birds but no more dogs
+            if (mEvilDogs.Count == 0 && mBirds.Count != 0)
+            {
+                SpawnDogs(mStartingDogNumber);
+            }
         }
     }
 
@@ -118,13 +122,13 @@ public class GameManager : MonoBehaviour
 
             tmp.transform.position = FindRandomPositionAroundObject(mPlayer.transform.position);
 
-            mEvilDogList.Add(tmp);
+            mEvilDogs.Add(tmp);
         }
     }
 
     public void RemoveDog(GameObject dogToRemove)
     {
-        mEvilDogList.Remove(dogToRemove);
+        mEvilDogs.Remove(dogToRemove);
     }
 
     public void RemoveBird(Bird birdToRemove)
@@ -142,5 +146,18 @@ public class GameManager : MonoBehaviour
         mPlayerReference.InputEnabled = false;
 
         mPlayer.transform.position = Vector3.zero;
+
+        // Remove reaming birds and dogs 
+        foreach (var bird in mBirds)
+        {
+            mBirds.Remove(bird);
+            Destroy(bird);
+        }
+
+        foreach (var dog in mEvilDogs)
+        {
+            mEvilDogs.Remove(dog);
+            Destroy(dog);
+        }
     }
 }
