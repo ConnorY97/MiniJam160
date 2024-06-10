@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
@@ -13,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
     private Slider mHealthBar = null;
     [SerializeField]
     private float mHealth = 100.0f;
+    public float Health
+    {
+        get { return mHealth; }
+    }
     [SerializeField]
     private float mDamage = 5.0f;
     [SerializeField]
@@ -25,16 +31,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
     [SerializeField]
-    private Image mLeft = null;
-    [SerializeField]
-    private Image mRight = null;
-    [SerializeField]
-    private Image mTop = null;
-    [SerializeField]
-    private Image mBottom = null;
+    private Animator mAnimator = null;
 
     [SerializeField]
-    private Animator mAnimator = null;
+    private Volume mVolume = null;
 
     private float mHorizontalInput = 0;
     private float mVerticalInput = 0;
@@ -81,11 +81,17 @@ public class PlayerMovement : MonoBehaviour
         mHealthBar.value = mHealth;
 
         // UI
+        // Grab the vigenette post proccessing effect and set the colour based on if the player is in the light or not
         {
-            mTop.gameObject.SetActive(!mInLight);
-            mRight.gameObject.SetActive(!mInLight);
-            mBottom.gameObject.SetActive(!mInLight);
-            mLeft.gameObject.SetActive(!mInLight);
+            mVolume.profile.TryGet(out Vignette vignette);
+            if (mInLight)
+            {
+                vignette.intensity.value = 0.0f;
+            }
+            else
+            {
+                vignette.intensity.value = 0.4f;
+            }
         }
 
         // Animations

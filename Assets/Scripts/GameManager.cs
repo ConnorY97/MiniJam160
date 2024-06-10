@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,15 +17,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject mScaryFace = null;
 
-    private List<GameObject> mEvilDogList = new List<GameObject>();
+    private List<GameObject> mEvilDogs = new List<GameObject>();
 
-    private List<GameObject> mBirds = new List<GameObject>();
+    public List<Bird> birds => mBirds;
+    private List<Bird> mBirds;
 
     private GameObject mPlayer = null;
+    private PlayerMovement mPlayerReference = null;
 
     private bool mGameOver = false;
-
-
 
     // Instance Stuff
     public static GameManager Instance { get; private set; }
@@ -42,34 +40,42 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        //DontDestroyOnLoad(gameObject);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         mPlayer = GameObject.FindGameObjectWithTag("Player");
         // Make sure we find the player
         Debug.Assert(mPlayer != null, "Failed to find the player");
 
+        mPlayerReference = mPlayer.GetComponent<PlayerMovement>();
+
+        Debug.Assert(mPlayerReference != null, "Failed to assign player reference from the mPlayer");
+
         SpawnDogs(mStartingDogNumber);
 
         // Find all the birds
-        var currentBirds = GameObject.FindGameObjectsWithTag("Bird");
-        foreach (GameObject bird in currentBirds)
-        {
-            mBirds.Add(bird);
-        }
+        mBirds = FindObjectsOfType<Bird>().ToList();
 
         Debug.Assert(mBirds.Count != 0, "Failed to find the birds");
+
+        //DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (mEvilDogList.Count == 0 || mBirds.Count == 0)
+        // Make sure the game isn't over
+        if (!mGameOver)
         {
-            EndSequence();
+            // Note (Rey): Why do we lose if all dogs are defeated?
+            // Fixing that now
+            // Lose if you run out of health or you run out of birds
+            if (mPlayerReference.Health <= 0 || mBirds.Count <= 0)
+            {
+                EndSequence();
+            }
+            // Spawn more dogs if you still have birds but no more dogs
+            if (mEvilDogs.Count == 0 && mBirds.Count != 0)
+            {
+                SpawnDogs(mStartingDogNumber);
+            }
         }
     }
 
@@ -116,16 +122,16 @@ public class GameManager : MonoBehaviour
 
             tmp.transform.position = FindRandomPositionAroundObject(mPlayer.transform.position);
 
-            mEvilDogList.Add(tmp);
+            mEvilDogs.Add(tmp);
         }
     }
 
     public void RemoveDog(GameObject dogToRemove)
     {
-        mEvilDogList.Remove(dogToRemove);
+        mEvilDogs.Remove(dogToRemove);
     }
 
-    public void RemoveBird(GameObject birdToRemove)
+    public void RemoveBird(Bird birdToRemove)
     {
         mBirds.Remove(birdToRemove);
     }
@@ -137,8 +143,21 @@ public class GameManager : MonoBehaviour
     {
         mGameOver = true;
 
-        mPlayer.GetComponent<PlayerMovement>().InputEnabled = false;
+        mPlayerReference.InputEnabled = false;
 
         mPlayer.transform.position = Vector3.zero;
+
+        // Remove reaming birds and dogs 
+        foreach (var bird in mBirds)
+        {
+            mBirds.Remove(bird);
+            Destroy(bird);
+        }
+
+        foreach (var dog in mEvilDogs)
+        {
+            mEvilDogs.Remove(dog);
+            Destroy(dog);
+        }
     }
 }

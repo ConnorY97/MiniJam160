@@ -10,10 +10,16 @@ public class EvilDog : MonoBehaviour
     [SerializeField]
     public float mAttackRange = 5.0f;
 
+    [SerializeField]
+    private Animator mAnimator = null;
+
     // Start is called before the first frame update
     void Start()
     {
         FindTarget();
+
+        // Make the bear run
+        mAnimator.SetBool("Run Forward", true);
     }
 
     // Update is called once per frame
@@ -38,6 +44,10 @@ public class EvilDog : MonoBehaviour
             if (Vector3.Distance(transform.position, mTarget.transform.position) < mAttackRange)
             {
                 transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.fixedDeltaTime);
+
+                // Stop running and jump
+                mAnimator.SetBool("Run Forward", false);
+                mAnimator.SetTrigger("Attack1");
             }
             // Move along the ground till we get close
             else
@@ -74,7 +84,6 @@ public class EvilDog : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Die on collision with the bird
         if (collision.gameObject.tag == "Bird" && mTarget != null)
         {
             // Kill the bird

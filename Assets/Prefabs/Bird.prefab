@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2107186030412620602}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2.11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,14 +44,14 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0.42921937, g: 1, b: 0, a: 1}
-  m_Intensity: 29.14
-  m_Range: 10
+  m_Color: {r: 0.54380363, g: 0.990566, b: 0.21026169, a: 1}
+  m_Intensity: 30
+  m_Range: 28.55
   m_SpotAngle: 68.55384
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 3
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_LightLayerMask: 1
   m_RenderingLayers: 1
   m_CustomShadowLayers: 0
@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 8759772636519435143}
   - component: {fileID: 6548932232999301699}
   - component: {fileID: 2366154285630617511}
-  - component: {fileID: 1353957345072200760}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Bird
@@ -219,9 +218,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dbe5ae818c90514ba9565673a8466fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTarget: {fileID: 0}
-  mSpeed: 5
+  target: {fileID: 0}
+  mMinSpeed: 3
+  mMaxSpeed: 7
+  mMinY: 3
+  mMaxY: 8
+  mMinX: -20
+  mMaxX: 20
+  mMinDistToBoundary: 1
   mAnimator: {fileID: 9009075580084539733}
+  mMaxSteeringForce: 4
+  mCohesionFactor: 0.5
+  mAlignmentFactor: 0.75
+  mSeparationFactor: 1
+  mTargetSeekingFactor: 0.35
+  mBoundaryFactor: 2
+  perceptionRadius: 5
+  separationRadius: 2.5
+  offsetToCenterOfFlock: {x: 0, y: 0, z: 0}
+  flockAlignment: {x: 0, y: 0, z: 0}
+  flockSeparation: {x: 0, y: 0, z: 0}
 --- !u!135 &2366154285630617511
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -243,33 +259,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &1353957345072200760
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3156779107136886595}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &5384419917952217053
 GameObject:
   m_ObjectHideFlags: 0
