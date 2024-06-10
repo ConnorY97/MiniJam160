@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class LightArea : MonoBehaviour
 {
-    private PlayerMovement mPlayer = null;
+    private PlayerController mPlayer = null;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Player")
         {
-            mPlayer = other.GetComponent<PlayerMovement>();
+            mPlayer = other.GetComponent<PlayerController>();
             mPlayer.InLight = true;
         }
     }

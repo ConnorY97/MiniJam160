@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
     public List<Bird> birds => mBirds;
     private List<Bird> mBirds;
 
+    [SerializeField]
     private GameObject mPlayer = null;
-    private PlayerMovement mPlayerReference = null;
+    private PlayerController mPlayerReference = null;
 
     private bool mGameOver = false;
 
@@ -40,11 +41,10 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        mPlayer = GameObject.FindGameObjectWithTag("Player");
         // Make sure we find the player
         Debug.Assert(mPlayer != null, "Failed to find the player");
 
-        mPlayerReference = mPlayer.GetComponent<PlayerMovement>();
+        mPlayerReference = mPlayer.GetComponent<PlayerController>();
 
         Debug.Assert(mPlayerReference != null, "Failed to assign player reference from the mPlayer");
 
