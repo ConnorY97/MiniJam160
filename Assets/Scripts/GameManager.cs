@@ -62,10 +62,16 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // Note (Rey): Why do we lose if all dogs are defeated?
-        // Current lose conditions
-        if (mEvilDogList.Count == 0 || mBirds.Count == 0 || mPlayerReference.Health <= 0)
+        // Fixing that now
+        // Lose if you run out of health or you run out of birds
+        if (mPlayerReference.Health <= 0 || mBirds.Count <= 0)
         {
             EndSequence();
+        }
+        // Spawn more dogs if you still have birds but no more dogs
+        if (mEvilDogList.Count == 0 && mBirds.Count != 0)
+        {
+            SpawnDogs(mStartingDogNumber);
         }
     }
 

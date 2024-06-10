@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 1455053998155220093}
   - component: {fileID: 595517951804733692}
   - component: {fileID: 8272845121880395339}
+  - component: {fileID: 822977934102317360}
   m_Layer: 0
   m_Name: EvilDog
   m_TagString: Dog
@@ -239,3 +240,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSpeed: 8
   mAttackRange: 5
+--- !u!54 &822977934102317360
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429580570094589616}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 4
+  m_CollisionDetection: 0
