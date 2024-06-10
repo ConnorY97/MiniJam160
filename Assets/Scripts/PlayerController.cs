@@ -49,38 +49,46 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Outside of the light take damage
-        if (mInLight == false && mDamageTime < Time.time)
+        if (!GameManager.Instance.GameOver)
         {
-            mHealth -= mDamage;
-            mDamageTime = Time.time + mDamageDelay;
-        }
-        // Inside of the light heal
-        else if (mInLight == true && mDamageTime < Time.time)
-        {
-            if (mHealth < 100.0f)
+            // Outside of the light take damage
+            if (mInLight == false && mDamageTime < Time.time)
             {
-                mHealth += mDamage;
+                mHealth -= mDamage;
+                mDamageTime = Time.time + mDamageDelay;
             }
-            mDamageTime = Time.time + mDamageDelay;
-        }
+            // Inside of the light heal
+            else if (mInLight == true && mDamageTime < Time.time)
+            {
+                if (mHealth < 100.0f)
+                {
+                    mHealth += mDamage;
+                }
+                mDamageTime = Time.time + mDamageDelay;
+            }
 
-        mHealthBar.value = mHealth;
+            mHealthBar.value = mHealth;
 
-        // Animations
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            mAnimator.SetTrigger("Attack");
-        }
+            // Animations
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                mAnimator.SetTrigger("Attack");
+            }
 
-        // UI
-        if (mInLight)
-        {
-            mVignette.intensity.value = 0.0f;
+            // UI
+            if (mInLight)
+            {
+                mVignette.intensity.value = 0.0f;
+            }
+            else
+            {
+                mVignette.intensity.value = 0.4f;
+            }
         }
         else
         {
-            mVignette.intensity.value = 0.4f;
+            mHealthBar.gameObject.SetActive(false);
+            mAnimator.gameObject.SetActive(false);
         }
     }
 }
