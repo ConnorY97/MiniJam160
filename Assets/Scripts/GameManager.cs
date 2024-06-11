@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour
     private bool mDebugging = false;
     [SerializeField]
     private GameObject mScaryFace = null;
+    public GameObject ScaryFace
+    {
+        get { return mScaryFace; }
+    }
 
     private List<GameObject> mEvilDogs = new List<GameObject>();
 

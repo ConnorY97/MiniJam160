@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        mDamageTime = Time.time + mDamageDelay;
+        mDamageTime = 0;// Time.time + mDamageDelay;
         mVolume.profile.TryGet(out Vignette vignette);
         mVignette = vignette;
     }
